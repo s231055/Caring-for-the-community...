@@ -1,4 +1,3 @@
-# Caring-for-the-community
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -374,7 +373,7 @@
                     `<img src="${deal.photoUrl}" alt="實物照片" class="w-full h-32 object-cover rounded-lg my-3 shadow-inner" onerror="this.onerror=null; this.src='https://placehold.co/400x150/fca5a5/ffffff?text=無圖或載入失敗';">` :
                     `<div class="h-20 flex items-center justify-center text-gray-400 bg-gray-50 rounded-lg my-3 border border-dashed">無實物照片</div>`;
 
-                const likeIcon = deal.userLiked ? 'heart' : 'heart-outline'; // 模擬已點讚狀態
+                const likeIcon = deal.userLiked ? 'heart' : 'heart'; 
                 const likeColor = deal.userLiked ? 'text-red-500' : 'text-gray-400';
 
                 card.innerHTML = `
@@ -421,7 +420,6 @@
                 listContainer.appendChild(card);
                 
                 // 初始化 Lucide Icons
-                // 【修復】必須傳遞 icons 物件
                 window.lucide.createIcons({ icons: window.lucide.icons });
 
                 // 綁定事件監聽器
@@ -485,6 +483,7 @@
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     // 檢查用戶是否已點讚 (模擬)
+                    // 注意：Firestore 的 updateDoc increment 不會自動創建 likes 欄位，但我們在 seedData 或 addDoc 時會確保它存在。
                     const userLiked = data.likedBy && data.likedBy[userId];
                     newDeals.push({ id: doc.id, ...data, userLiked });
                 });
@@ -646,8 +645,41 @@
                 return;
             }
 
-            // 【已清空】不再包含任何模擬優惠數據
-            const mockDeals = [];
+            // 【已新增】模擬優惠數據
+            const mockDeals = [
+                {
+                    category: '急清貨',
+                    location: '屯門市廣場-百佳',
+                    details: '三文魚刺身半價！原價 $50/盒，現售 $25/盒！只限 2 盒。',
+                    expiry: '今晚 8:30pm 截止',
+                    photoUrl: 'https://placehold.co/400x150/ef4444/ffffff?text=急清三文魚',
+                    likes: 15,
+                },
+                {
+                    category: '超市',
+                    location: '新墟街市-惠康',
+                    details: '所有國產零食買二送一，可混合搭配！',
+                    expiry: '本週末 (週六日) 全天',
+                    photoUrl: 'https://placehold.co/400x150/3b82f6/ffffff?text=零食大優惠',
+                    likes: 8,
+                },
+                {
+                    category: '街市',
+                    location: '友愛街市-陳記菜檔',
+                    details: '本地生菜 $5/斤，大白菜 $10/個，比平時便宜 30%！',
+                    expiry: '賣完即止',
+                    photoUrl: '', // 沒照片
+                    likes: 22,
+                },
+                {
+                    category: '食肆',
+                    location: 'V city - 某茶餐廳',
+                    details: '學生憑證，所有飲品免費加大！',
+                    expiry: '長期有效 (週一至五)',
+                    photoUrl: 'https://placehold.co/400x150/10b981/ffffff?text=學生優惠',
+                    likes: 10,
+                }
+            ];
 
             try {
                 const results = await Promise.all(mockDeals.map((deal, index) => {
@@ -659,12 +691,13 @@
                         reporterId: userId,
                         timestamp: timestampOffset,
                         geoTag: 'TuenMun',
+                        likes: deal.likes || 0,
+                        likedBy: {}
                     };
                     return addDoc(collection(db, DEALS_COLLECTION_PATH), newDeal);
                 }));
 
-                // 調整提示訊息，反映沒有添加新的模擬優惠
-                showToast(`模擬優惠清單已清空。已嘗試添加 ${results.length} 條模擬優惠 (0 條)。`, 'bg-gray-500');
+                showToast(`成功添加 ${results.length} 條模擬優惠！`, 'bg-green-500');
             } catch (error) {
                 console.error("生成模擬數據失敗:", error);
                 showToast('生成模擬優惠失敗，請檢查控制台。', 'bg-red-500');
@@ -683,7 +716,6 @@
             document.getElementById('deal-submission-form').addEventListener('submit', handleSubmission);
             
             // 替換 Lucide Icon 的顯示
-            // 【修復】必須傳遞 icons 物件
             window.lucide.createIcons({ icons: window.lucide.icons });
         };
 
