@@ -638,12 +638,6 @@
 
         /**
          * 新增：生成模擬數據並寫入 Firestore
-         */
-        async function seedMockData() {
-            if (!state.isAuthReady || !db) {
-                showToast('請等待應用程式完成初始化。', 'bg-yellow-500');
-                return;
-            }
 
             // 【已新增】模擬優惠數據
             const mockDeals = [
