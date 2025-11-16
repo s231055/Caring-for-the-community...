@@ -136,9 +136,9 @@
             </form>
             <p id="submission-message" class="mt-4 text-center text-green-600 font-semibold hidden"></p>
 
-            <!-- 新增：模擬數據生成按鈕 -->
-            <button id="seed-mock-button" onclick="window.app.seedData()"
-                    class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-xl transition duration-300 shadow-lg mt-6 text-sm">
+            <!-- 新增：模擬數據生成按鈕 (FIX: 預設禁用，直到初始化完成) -->
+            <button id="seed-mock-button" onclick="window.app.seedData()" disabled
+                    class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-xl transition duration-300 shadow-lg mt-6 text-sm opacity-50 cursor-not-allowed">
                 一鍵生成模擬優惠 (測試用)
             </button>
         </div>
@@ -452,6 +452,13 @@
                 
                 userId = auth.currentUser?.uid || crypto.randomUUID();
                 state.isAuthReady = true;
+
+                // FIX: 認證完成後，解除禁用模擬數據生成按鈕
+                const seedButton = document.getElementById('seed-mock-button');
+                if (seedButton) {
+                    seedButton.disabled = false;
+                    seedButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
                 
                 console.log(`Firebase 初始化成功。User ID: ${userId}`);
 
@@ -638,8 +645,15 @@
 
         /**
          * 新增：生成模擬數據並寫入 Firestore
+         */
+        async function seedMockData() {
+            // 這個檢查仍然保留作為最後一道防線，但現在按鈕會在初始化後才啟用
+            if (!state.isAuthReady || !db) {
+                showToast('應用程式初始化尚未完成。', 'bg-yellow-500');
+                return;
+            }
 
-            // 【已新增】模擬優惠數據
+            // 模擬優惠數據
             const mockDeals = [
                 {
                     category: '急清貨',
