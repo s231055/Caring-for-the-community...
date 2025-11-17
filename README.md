@@ -653,7 +653,7 @@
                 return;
             }
 
-            // 模擬優惠數據
+            // 【已更新】模擬優惠數據，總共 6 條
             const mockDeals = [
                 {
                     category: '急清貨',
@@ -686,6 +686,23 @@
                     expiry: '長期有效 (週一至五)',
                     photoUrl: 'https://placehold.co/400x150/10b981/ffffff?text=學生優惠',
                     likes: 10,
+                },
+                // 新增兩條虛擬優惠
+                {
+                    category: '長者專屬',
+                    location: '屯門大會堂',
+                    details: '65歲或以上長者，憑證件免費觀看本地文化展覽。',
+                    expiry: '即日至本月月底',
+                    photoUrl: 'https://placehold.co/400x150/8b5cf6/ffffff?text=長者優惠', 
+                    likes: 5,
+                },
+                {
+                    category: '其他',
+                    location: '屯門公園',
+                    details: '最新荷蘭鬱金香品種展覽，免費參觀！',
+                    expiry: '限時一週',
+                    photoUrl: 'https://placehold.co/400x150/06b6d4/ffffff?text=公園活動', 
+                    likes: 18,
                 }
             ];
 
