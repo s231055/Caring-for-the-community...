@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>屯門急清報料站 - 即時優惠分享</title>
+    <title>屯門優惠報料站 - 即時優惠分享</title>
     <!-- 載入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 移除單獨的 Lucide Icons 導入區塊，避免腳本執行順序問題 -->
@@ -36,7 +36,7 @@
         <!-- 標題與導航 -->
         <header class="mb-6 bg-white shadow-lg rounded-xl p-4 sticky top-0 z-10">
             <h1 class="text-3xl font-extrabold text-red-600 mb-2 flex items-center">
-                <span class="mr-2 text-4xl">🚨</span>屯門急清報料站
+                <span class="mr-2 text-4xl">🚨</span>屯門優惠報料站
             </h1>
             <p class="text-sm text-gray-500 mb-4">即時分享屯門區內 (及模擬 1000m 內) 的急清、超市、街市等優惠。</p>
 
